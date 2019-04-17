@@ -19,6 +19,7 @@ import os.path
 from jsonschema import Draft4Validator
 import sys
 from urllib.request import urlopen
+from io import IOBase
 
 
 def load_json_string(jsonstring):
@@ -49,7 +50,7 @@ def get_json(jsongraph):
     '''
     if type(jsongraph) is dict:
         return jsongraph
-    elif type(jsongraph) is file:
+    elif isinstance(jsongraph, IOBase):
         return json.load(jsongraph)
     elif os.path.isfile(jsongraph):
         with open(jsongraph, 'rb') as f:
