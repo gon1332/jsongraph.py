@@ -26,7 +26,7 @@ def load_json_string(jsonstring):
 
     try:
         json_object = json.loads(jsonstring)
-    except ValueError, e:
+    except ValueError as e:
         return False
     return json_object
 
