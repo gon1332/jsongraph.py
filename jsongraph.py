@@ -18,7 +18,7 @@ import json
 import os.path
 from jsonschema import Draft4Validator
 import sys
-import urllib
+from urllib.request import urlopen
 
 
 def load_json_string(jsonstring):
@@ -34,7 +34,7 @@ def load_json_string(jsonstring):
 def get_github_masterschema():
     '''Read JSON Graph Schema file from Github Master branch'''
     link = 'https://raw.githubusercontent.com/jsongraph/json-graph-specification/master/json-graph-schema.json'
-    f = urllib.urlopen(link)
+    f = urlopen(link)
     js = json.load(f)
     f.close
 
