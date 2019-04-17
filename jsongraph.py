@@ -19,6 +19,7 @@ import os.path
 from jsonschema import Draft4Validator
 import sys
 from urllib.request import urlopen
+from io import IOBase
 
 
 def load_json_string(jsonstring):
@@ -33,7 +34,8 @@ def load_json_string(jsonstring):
 
 def get_github_masterschema():
     '''Read JSON Graph Schema file from Github Master branch'''
-    link = 'https://raw.githubusercontent.com/jsongraph/json-graph-specification/master/json-graph-schema.json'
+    link = ('https://raw.githubusercontent.com/jsongraph/'
+            'json-graph-specification/master/json-graph-schema.json')
     f = urlopen(link)
     js = json.load(f)
     f.close
@@ -48,7 +50,7 @@ def get_json(jsongraph):
     '''
     if type(jsongraph) is dict:
         return jsongraph
-    elif type(jsongraph) is file:
+    elif isinstance(jsongraph, IOBase):
         return json.load(jsongraph)
     elif os.path.isfile(jsongraph):
         with open(jsongraph, 'rb') as f:
@@ -94,11 +96,14 @@ def validate_jsongraph(jsongraph, schema='', verbose=False):
         schema = get_json(schema)
 
     if not jg:
-        sys.exit('JSON Graph parameter does not appear to be a file object, filepath or JSON string.')
+        sys.exit('JSON Graph parameter does not appear to be a file object, '
+                 'filepath or JSON string.')
     if not schema:
-        sys.exit('JSON Graph Schema parameter does not appear to be a file object, filepath or JSON string.')
+        sys.exit('JSON Graph Schema parameter does not appear to be a file '
+                 'object, filepath or JSON string.')
 
-    schema = Draft4Validator(schema)  # transform schema in a Schema validation object
+    # transform schema in a Schema validation object
+    schema = Draft4Validator(schema)
 
     errors = [error for error in schema.iter_errors(jg)]
     if verbose and errors:
@@ -136,8 +141,12 @@ def load_graphs(jsongraphs, validate=False, schema='', verbose=False):
 
 def test_example_graphs():
     '''Test and usage example'''
-    single_graph_link = 'https://raw.githubusercontent.com/jsongraph/json-graph-specification/master/examples/usual_suspects.json'
-    multiple_graph_link = 'https://raw.githubusercontent.com/jsongraph/json-graph-specification/master/examples/car_graphs.json'
+    single_graph_link = ('https://raw.githubusercontent.com/jsongraph/'
+                         'json-graph-specification/master/examples/'
+                         'usual_suspects.json')
+    multiple_graph_link = ('https://raw.githubusercontent.com/jsongraph/'
+                           'json-graph-specification/master/examples/'
+                           'car_graphs.json')
 
     f = urlopen(single_graph_link)
     sg = json.load(f)
