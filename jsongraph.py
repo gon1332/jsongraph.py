@@ -72,10 +72,10 @@ def validate_schema(schema='', verbose=False):
     results = Draft4Validator.check_schema(schema)
 
     if verbose and results:
-        print "    Schema doesn't validate!"
-        print results
+        print("    Schema doesn't validate!")
+        print(results)
     elif verbose:
-        print "    Schema Validates!"
+        print("    Schema Validates!")
 
     if results:
         return (False, results)
@@ -102,14 +102,14 @@ def validate_jsongraph(jsongraph, schema='', verbose=False):
 
     errors = [error for error in schema.iter_errors(jg)]
     if verbose and errors:
-        print 'Problem with JSON Graph'
+        print('Problem with JSON Graph')
         for error in errors:
-            print error
+            print(error)
 
         quit()
 
     elif verbose:
-        print "    Validated!"
+        print("    Validated!")
 
     if errors:
         return errors
@@ -139,28 +139,28 @@ def test_example_graphs():
     single_graph_link = 'https://raw.githubusercontent.com/jsongraph/json-graph-specification/master/examples/usual_suspects.json'
     multiple_graph_link = 'https://raw.githubusercontent.com/jsongraph/json-graph-specification/master/examples/car_graphs.json'
 
-    f = urllib.urlopen(single_graph_link)
+    f = urlopen(single_graph_link)
     sg = json.load(f)
     f.close
 
-    f = urllib.urlopen(multiple_graph_link)
+    f = urlopen(multiple_graph_link)
     mg = json.load(f)
     f.close
 
-    print "Does JSON Graph Schema validate?"
+    print("Does JSON Graph Schema validate?")
     validate_schema(schema='', verbose=True)
 
-    print "\nDoes Single Graph example validate?"
+    print("\nDoes Single Graph example validate?")
     validate_jsongraph(sg, schema='', verbose=True)
 
-    print "\nShow Label of Single Graph"
+    print("\nShow Label of Single Graph")
     graphs = load_graphs(sg, validate=False, schema='', verbose=False)
-    print "    Label: ", next(graphs)['label']
+    print("    Label: ", next(graphs)['label'])
 
-    print "\nShow Label's of Multiple Graphs"
+    print("\nShow Label's of Multiple Graphs")
     graphs = load_graphs(mg, validate=False, schema='', verbose=False)
     for graph in graphs:
-        print "    Label: ", graph['label']
+        print("    Label: ", graph['label'])
 
 
 def main():
